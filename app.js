@@ -1,16 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
-const dotenv = require('dotenv').config()
 
+const db = require('./config/database')
 const userRoutes = require('./routes/user');
 
-const db = mysql.createConnection({
-	host :  process.env.DB_HOST,
-	user :  process.env.DB_USER,
-	password :  process.env.DB_PASSWORD,
-	database : process.env.DATABASE,
-});
 db.connect((error) => {
 	if(error) {
 		console.log(error)
@@ -30,15 +23,6 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-app.get('/api/test', (req,res) => {
-	let sql = 'SELECT * FROM user';
-	db.query(sql, (err, result) => {
-		if(err) throw(err);
-		console.log(result);
-		res.send(result);
-	})
-
-});
 app.use('/api/auth', userRoutes);
 
 module.exports = app;

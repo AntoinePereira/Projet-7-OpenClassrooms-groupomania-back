@@ -1,16 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const path = require('path');
 const mysql = require('mysql');
+const dotenv = require('dotenv').config()
 
 const userRoutes = require('./routes/user');
 
-var connection = mysql.createConnection({
-	host     : 'localhost',
-	user     : 'adminGroupo',
-	password : 'flrnf34r7f43b34qo934q9eLCEbx',
-	database : 'groupomania'
+const db = mysql.createConnection({
+	host :  process.env.DB_HOST,
+	user :  process.env.DB_USER,
+	password :  process.env.DB_PASSWORD,
+	database : process.env.DATABASE,
 });
+db.connect((error) => {
+	if(error) {
+		console.log(error)
+	} else {
+		console.log('Mysql connected');
+	}
+})
 
 const app = express();
 
@@ -21,20 +28,17 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use(bodyParser.json());
 
+app.get('/api/test', (req,res) => {
+	let sql = 'SELECT * FROM user';
+	db.query(sql, (err, result) => {
+		if(err) throw(err);
+		console.log(result);
+		res.send(result);
+	})
+
+});
 app.use('/api/auth', userRoutes);
-
-/*app.use((req, res, next) => {
-  res.json({ message: 'Votre requête a bien été reçue !' });
-  next();
-});
-
-app.use((req, res, next) => {
-  console.log('Réponse envoyée avec succès !');
-});
-*/
-
 
 module.exports = app;

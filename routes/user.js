@@ -5,7 +5,7 @@ const userCtrl = require('../controllers/user')
 
 
 router.get('/', userCtrl.getAllUsers);
-router.get('/testsignup', userCtrl.signup);
+router.post('/signup', userCtrl.signup);
 
 
 module.exports = router;

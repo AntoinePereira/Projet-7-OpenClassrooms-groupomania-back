@@ -1,16 +1,23 @@
-const express = require('express');
-const mysql = require('mysql');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const db = require('../config/database');
 
 exports.signup = (req, res, next) => {
-	let form = { nom:'nom3', prenom:'prenom3', email:'email3@gmail.com', password:'password3'};
-	let sql = 'INSERT INTO user SET ?';
-	let query = db.query(sql, form, (err, result) => {
-		if(err) throw(err);
-		console.log(result);
-		res.send(result);
-	})
-}
+	bcrypt.hash(req.body.password, 10)
+    	.then(hash => {
+    		req.body.password = hash;
+    		let sql = `INSERT INTO user SET ????`;
+    		let user = [ req.body.nom, req.body.prenom, req.body.email, hash]
+			db.query(sql, user, (err, result) => {
+				if(err) throw(err);
+				console.log(result);
+				res.send(result);
+			})
+		})
+};
+	
+	
+	
 exports.login = (req, res, next) => {}
 
 
@@ -28,3 +35,5 @@ exports.getUser = (req, res, next) => {
 	console.log('haha');
 	res.json('results');
 };
+// {nom : 'value', prenom : 'value', email : 'value', password : 'value'}
+// {nom : req.body.nom, prenom : req.body.prenom, email : req.body.email, password : req.body.password}

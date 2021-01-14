@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 const db = require('./config/database')
 const userRoutes = require('./routes/user');
+const postsRoutes = require('./routes/posts');
 
 db.connect((error) => {
 	if(error) {
@@ -24,5 +25,6 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 app.use('/api/auth', userRoutes);
+app.use('/api/posts', postsRoutes);
 
 module.exports = app;

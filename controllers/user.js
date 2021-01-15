@@ -24,30 +24,30 @@ exports.login = (req, res, next) => {
 	const email = req.body.email;
 	const password = req.body.password;
 	let sql = `SELECT * FROM user WHERE email= ?`
-	if (email && password) {
-		db.query(sql, email, (err, result) => {
-		if (result.length > 0) {
-       	 	bcrypt.compare(password, result[0].password)
-        	.then(valid => {
-          		if (!valid) {
-            		return res.status(401).json({ error: 'Mot de passe incorrect !' });
-          		}else {
-          			console.log('User connected');
-          			res.status(200).json({
-            			userId: result[0].id,
-            			nom: result[0].nom,
-            			prenom: result[0].prenom,
-            			token: jwt.sign(
-              				{ userId: result[0].id },
-              				'RANDOM_TOKEN_SECRET',
-              				{ expiresIn: '24h' }
-            			)
-          			});
-          		}
-        	})
-        	.catch(error => res.status(500).json({ error }));
-   	 	}})
-   	}
+	if (!email || !password) { throw 'no email or no password'}
+	db.query(sql, email, (err, result) => {
+	if (result.length > 0) {
+        	bcrypt.compare(password, result[0].password)
+       	.then(valid => {
+         		if (!valid) {
+           		return res.status(401).json({ error: 'Mot de passe incorrect !' });
+         		}else {
+         			console.log('User connected');
+         			res.status(200).json({
+           			userId: result[0].id,
+           			nom: result[0].nom,
+           			prenom: result[0].prenom,
+           			token: jwt.sign(
+             				{ userId: result[0].id },
+             				'RANDOM_TOKEN_SECRET',
+             				{ expiresIn: '24h' }
+           			)
+         			});
+         		}
+       	})
+       	.catch(error => res.status(500).json({ error }));
+   	}})
+   	
 };
    	 	
 

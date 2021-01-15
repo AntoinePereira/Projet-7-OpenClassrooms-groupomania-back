@@ -43,7 +43,14 @@ exports.modifyPost = (req, res, next) => {
 }
 
 
-//exports.deletePost = (req, res, next) => {}
+exports.deletePost = (req, res, next) => {
+	let id = req.params.id;
+	let sql = `DELETE FROM post WHERE id= ?`;
+	 db.query(sql, id, (err, result) => {
+	 	if(err) throw err;
+	 	res.send(result);
+	 })
+}
 
 
 

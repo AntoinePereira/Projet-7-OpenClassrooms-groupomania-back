@@ -11,7 +11,7 @@ router.get('/', postsCtrl.getAllPosts);
 
 //router.get('/:id', postsCtrl.getOnePost);
 
-//router.post('/', auth, multer, postsCtrl.createPost);
+router.post('/', postsCtrl.createPost);
 
 //router.put('/:id', auth, multer, postsCtrl.modifyPost);
 

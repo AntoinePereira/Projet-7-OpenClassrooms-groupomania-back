@@ -8,13 +8,20 @@ exports.getAllPosts = (req, res, next) => {
 	 })
 }
 
-//exports.getOnePost = (req, res, next) => {}
+exports.getOnePost = (req, res, next) => {
+	 let sql = `SELECT * FROM post WHERE id=?`;
+	 let id = req.params.id;
+	 db.query(sql, id, (err, result) => {
+				if(err) throw(err);
+				console.log(result);
+				res.send(result);
+			})
+}
 
 exports.createPost = (req, res, next) => {
 	let title = req.body.title;
 	let post = req.body.post;
 	let userId = req.body.userId;
-	//let date = NOW();
 	let sql = `INSERT INTO post (post_title, post, user_id, date ) VALUES (?,?,?,NOW())`;
 	db.query(sql, [title, post, userId], (err, result) => {
 		if(err) throw(err);
@@ -23,7 +30,21 @@ exports.createPost = (req, res, next) => {
 	});
 }
 
-//exports.modifyPost = (req, res, next) => {}
+exports.modifyPost = (req, res, next) => {
+	let id = req.params.id;
+	let	title = req.body.title;
+	let	post = req.body.post;
+	
+	let sql = `UPDATE post SET post=?, post_title=? WHERE id= ?`;
+	 db.query(sql,[post, title, id], (err, result) => {
+	 	if(err) throw err;
+	 	res.send(result);
+	 })
+}
 
 
 //exports.deletePost = (req, res, next) => {}
+
+
+
+//{"title" : "monTitre2", "post" : "monPostmonPostmonPostmonPostmonPost2", "userId" : "6"}

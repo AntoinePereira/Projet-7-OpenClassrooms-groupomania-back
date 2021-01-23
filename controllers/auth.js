@@ -1,7 +1,8 @@
+const dotenv = require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../config/database');
-//const User = require("../models/user.js");
+
 
 exports.signup = (req, res, next) => {
 	bcrypt.hash(req.body.password, 10)
@@ -21,10 +22,8 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
 	const email = req.body.email;
 	const password = req.body.password;
-	let sql = `SELECT * FROM user WHERE email= ?`
-
 	if (!email || !password) { throw 'no email or no password'}
-
+	let sql = `SELECT * FROM user WHERE email= ?`
 	db.query(sql, email, (err, result) => {
 		if (result.length > 0) {
     	    bcrypt.compare(password, result[0].password)
@@ -39,7 +38,7 @@ exports.login = (req, res, next) => {
     	       			prenom: result[0].prenom,
     	       			token: jwt.sign(
     	        				{ userId: result[0].id },
-    	        				'RANDOM_TOKEN_SECRET',
+    	        				process.env.JWT_SECRET,
     	        				{ expiresIn: '24h' }
     	       			)
     	     		});

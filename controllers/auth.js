@@ -33,9 +33,11 @@ exports.login = (req, res, next) => {
     	     	}else {
     	     		console.log('User connected');
     	     		res.status(200).json({
-    	       			userId: result[0].id,
-    	       			nom: result[0].nom,
-    	       			prenom: result[0].prenom,
+    	     			user: {
+    	     				userId: result[0].id,
+    	       				nom: result[0].nom,
+    	       				prenom: result[0].prenom,
+    	     			},
     	       			token: jwt.sign(
     	        				{ userId: result[0].id },
     	        				process.env.JWT_SECRET,

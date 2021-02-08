@@ -31,11 +31,9 @@ exports.createComment = (req, res, next) => {
 
 exports.modifyComment = (req, res, next) => {
 	let id = req.params.id;
-	let	title = req.body.title;
 	let	comment = req.body.comment;
-	
-	let sql = `UPDATE comment SET commentt=?, post_title=? WHERE id= ?`;
-	 db.query(sql,[post, title, id], (err, result) => {
+	let sql = `UPDATE comment SET comment=?, WHERE id= ?`;
+	 db.query(sql,[comment, id], (err, result) => {
 		if(err) throw err;
 		res.send(result);
 	 })

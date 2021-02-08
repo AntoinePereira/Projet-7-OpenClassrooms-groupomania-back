@@ -8,8 +8,8 @@ exports.getAllComments = (req, res, next) => {
 	 })
 }
 
-exports.getOneComment = (req, res, next) => {
-	let sql = `SELECT * FROM comment WHERE post_id=?`;
+exports.getOnePostComments = (req, res, next) => {
+	let sql = `SELECT comment.id, comment.post_id, comment.comment, comment.user_id, comment.date, user.nom, user.prenom FROM comment INNER JOIN user ON comment.user_id = user.id WHERE post_id=?`;
 	let postId = req.params.id;
 	db.query(sql, postId, (err, result) => {
 				if(err) throw(err);
@@ -50,3 +50,5 @@ exports.deleteComment = (req, res, next) => {
 		res.send(result);
 	 })
 }
+
+//`SELECT * FROM comment WHERE post_id=?`

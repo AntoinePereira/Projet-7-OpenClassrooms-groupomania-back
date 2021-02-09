@@ -7,7 +7,7 @@ const usersCtrl = require('../controllers/users.js');
 
 
 router.get('/', usersCtrl.getAllUsers);
-router.get('/:id', usersCtrl.getOneUser);
+router.get('/:id', auth, usersCtrl.getOneUser);
 
 
 module.exports = router;

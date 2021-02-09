@@ -1,7 +1,9 @@
 const db = require('../config/database');
 
 exports.getAllPosts = (req, res, next) => {
-	 let sql = `SELECT * FROM post ORDER BY date`
+
+	let sql = `SELECT post.id, post.post_title, post.post, post.user_id, post.date, user.nom, user.prenom FROM post INNER JOIN user ON post.user_id = user.id ORDER BY date`
+	// let sql = `SELECT * FROM post ORDER BY date`
 	 db.query(sql, (err, result) => {
 	 	if(err) throw err;
 	 	res.send(result);

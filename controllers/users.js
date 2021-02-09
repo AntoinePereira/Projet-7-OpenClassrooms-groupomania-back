@@ -18,3 +18,11 @@ exports.getOneUser = (req, res, next) => {
 			})
 }
 
+exports.deleteUser = (req, res, next) => {
+	let id = req.params.id;
+	let sql = `DELETE FROM user WHERE id= ?`;
+	 db.query(sql, id, (err, result) => {
+	 	if(err) throw err;
+	 	res.send(result);
+	 })
+}

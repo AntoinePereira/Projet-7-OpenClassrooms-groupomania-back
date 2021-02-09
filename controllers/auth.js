@@ -37,6 +37,7 @@ exports.login = (req, res, next) => {
     	     				userId: result[0].id,
     	       				nom: result[0].nom,
     	       				prenom: result[0].prenom,
+                            isAdmin: result[0].isAdmin
     	     			},
     	       			token: jwt.sign(
     	        				{ userId: result[0].id },

@@ -25,6 +25,8 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
+app.use(require('sanitize').middleware);
+
 
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postsRoutes);

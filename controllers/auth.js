@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/database');
 
 
-exports.signup = (req, res, next) => {
+exports.signup = (req, res, _next) => {
 	bcrypt.hash(req.body.password, 10)
     .then(hash => {
     	req.body.password = hash;
@@ -19,11 +19,12 @@ exports.signup = (req, res, next) => {
 };
 	
 
-exports.login = (req, res, next) => {
+exports.login = (req, res, _next) => {
 	const email = req.body.email;
 	const password = req.body.password;
 	if (!email || !password) { throw 'no email or no password'}
 	let sql = `SELECT * FROM user WHERE email= ?`
+
 	db.query(sql, email, (err, result) => {
 		if (result.length > 0) {
     	    bcrypt.compare(password, result[0].password)
@@ -31,7 +32,7 @@ exports.login = (req, res, next) => {
     	     	if (!valid) {
     	       		return res.status(401).json({ error: 'Mot de passe incorrect !' });
     	     	}else {
-    	     		console.log('User connected');
+    	     		//console.log('User connected');
     	     		res.status(200).json({
     	     			user: {
     	     				userId: result[0].id,
@@ -52,35 +53,3 @@ exports.login = (req, res, next) => {
    	})
 };
    	 	
-
-
-
-///////////////////////////////////////TEST//////////////////////////////////////////
-/*	let sql = 'SELECT * FROM user';
-	db.query(sql, (err, result) => {
-		if(err) throw(err);
-		console.log(result);
-		res.send(result);
-	})
-}
-exports.getUser = (req, res, next) => {
-	console.log('haha');
-	res.json('results');
-};
-exports.test = (req, res) => {
-	let sql = 'SELECT * FROM user';
-	db.query(sql, (err, result) => {
-		if(err) {
-            return res.status(401).json({ error: "User not found." });
-        };
-		console.log(result);
-		res.send(result);
-	})
-}*/
-	
-
-// {nom : 'value', prenom : 'value', email : 'value', password : 'value'}
-// {nom : req.body.nom, prenom : req.body.prenom, email : req.body.email, password : req.body.password}
-//{ "nom": "value", "prenom" : "value", "email" : "value", "password" : "value"}
-//let user = [ req.body.nom, req.body.prenom, req.body.email, hash]
-//{ "nom": "testnom", "prenom" : "testprenom", "email" : "test@email.com", "password" : "test"}

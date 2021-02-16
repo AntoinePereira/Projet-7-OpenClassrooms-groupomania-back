@@ -8,9 +8,13 @@ exports.signup = (req, res, _next) => {
 	bcrypt.hash(req.body.password, 10)
     .then(hash => {
     	req.body.password = hash;
-    	let sql = `INSERT INTO user SET ?`;
-    	let user = req.body;
-		db.query(sql, user, (err, result) => {
+        let nom = req.body.nom;
+        let prenom = req.body.prenom;
+        let email = req.body.email;
+        let isAdmin = 0
+    	let sql = `INSERT INTO user ( nom, prenom, email, password, isAdmin ) VALUES (?,?,?,?,?)`;
+
+		db.query(sql, [nom, prenom, email, hash, isAdmin], (err, result) => {
 			if(err) throw(err);
 			res.status(201).json({ message: "User created" });
 		})
@@ -41,7 +45,7 @@ exports.login = (req, res, _next) => {
                             isAdmin: result[0].isAdmin
     	     			},
     	       			token: jwt.sign(
-    	        				{ userId: result[0].id, isAdmin: result[0].id },
+    	        				{ userId: result[0].id, isAdmin: result[0].isAdmin },
     	        				process.env.JWT_SECRET,
     	        				{ expiresIn: '24h' }
     	       			)
